@@ -4,7 +4,7 @@ require_relative 'template'
 
 module Low
   module Templates
-    # Use the Method Factory pattern to .render -> .new -> #initialize -> #render a low node.
+    # Use the Method Factory pattern to ".render -> .new -> #initialize -> #render" a low node.
     module Renderer
       # When render() contains RBX/Antlers then LowLoad builds a template to render with instead.
       def render_template(parent_binding: nil, slot_node: nil, props: {}, **kwargs)
@@ -34,7 +34,8 @@ module Low
 
           return if body.nil? || body == ''
 
-          response = Low::Factories::ResponseFactory.html(body:)
+          # TODO: ResponseFactory should be done in LowLoop, which is where the class lives already anyway.
+          response = Low::ResponseFactory.html(body:)
           Low::Events::ResponseEvent.new(response:).tap(&:branch)
         end
 
