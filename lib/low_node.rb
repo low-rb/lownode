@@ -3,7 +3,7 @@
 require 'observers'
 require 'low_type'
 require 'low_event'
-require 'low_loop' # TODO: Merge low loop's response factory into low event.
+require 'low_loop' # TODO: ResponseFactory should be done in LowLoop, which is where the class lives already anyway.
 
 require_relative 'templates/renderer'
 
