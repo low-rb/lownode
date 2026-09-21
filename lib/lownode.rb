@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require 'observers'
-require 'low_type'
-require 'low_event'
-require 'low_loop' # TODO: ResponseFactory should be done in LowLoop, which is where the class lives already anyway.
+require 'lowtype'
+require 'lowevent'
+require 'lowloop' # TODO: ResponseFactory should be done in LowLoop, which is where the class lives already anyway.
 
 require_relative 'templates/renderer'
 

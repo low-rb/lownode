@@ -1,4 +1,4 @@
-require_relative '../low_node'
+require_relative '../lownode'
 
 class UserNode < LowNode
   observe 'users/:id'

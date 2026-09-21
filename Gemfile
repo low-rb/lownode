@@ -2,14 +2,14 @@
 
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in low_node.gemspec
+# Specify your gem's dependencies in lownode.gemspec
 gemspec
 
 group :development do
-  gem 'low_event', path: '../low_event'
   gem 'lowload', path: '../lowload'
-  gem 'low_loop', path: '../low_loop'
-  gem 'low_type', path: '../low_type'
+  gem 'lowevent', path: '../lowevent'
+  gem 'lowloop', path: '../lowloop'
+  gem 'lowtype', path: '../lowtype'
 
   gem 'antlers', path: '../antlers'
   gem 'observers', path: '../observers'

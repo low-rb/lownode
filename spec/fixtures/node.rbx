@@ -1,4 +1,4 @@
-require_relative '../../lib/low_node'
+require_relative '../../lib/lownode'
 
 module RBX
   class Node < LowNode

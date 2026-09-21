@@ -4,11 +4,11 @@
 
 Install the gem and add to the application's Gemfile by executing:
 
-    $ bundle add low_node
+    $ bundle add lownode
 
 If bundler is not being used to manage dependencies, install the gem by executing:
 
-    $ gem install low_node
+    $ gem install lownode
 
 ## Development
 
@@ -18,4 +18,4 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/low-rb/low_node.
+Bug reports and pull requests are welcome on GitHub at https://github.com/low-rb/lownode.

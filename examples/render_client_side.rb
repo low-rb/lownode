@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../low_node'
+require_relative '../lownode'
 
 class UserNode < LowNode
   observe 'api/v1/users/:id'

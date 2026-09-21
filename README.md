@@ -1,4 +1,4 @@
-<a href="https://rubygems.org/gems/low_node" title="Install gem"><img src="https://badge.fury.io/rb/low_node.svg" alt="Gem version" height="18"></a>
+<a href="https://rubygems.org/gems/lownode" title="Install gem"><img src="https://badge.fury.io/rb/lownode.svg" alt="Gem version" height="18"></a>
 
 # LowNode
 
