@@ -6,12 +6,12 @@ source 'https://rubygems.org'
 gemspec
 
 group :development do
-  gem 'lowload', path: '../lowload'
   gem 'lowevent', path: '../lowevent'
   gem 'lowloop', path: '../lowloop'
   gem 'lowtype', path: '../lowtype'
 
   gem 'antlers', path: '../antlers'
+  gem 'dirload', path: '../dirload'
   gem 'observers', path: '../observers'
 
   gem 'irb'

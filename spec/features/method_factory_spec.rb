@@ -2,7 +2,7 @@
 
 require 'antlers'
 
-LowLoad.dirload(File.join(Dir.pwd, 'spec/fixtures'))
+dirload(File.join(Dir.pwd, 'spec/fixtures'))
 
 RSpec.describe 'Method Factory' do
   describe '#render' do

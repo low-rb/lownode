@@ -6,7 +6,7 @@ module Low
   module Templates
     # Use the Method Factory pattern to ".render -> .new -> #initialize -> #render" a LowNode.
     module Renderer
-      # When render() contains RBX/Antlers then LowLoad builds a template to render with instead.
+      # When render() contains RBX/Antlers then Dirload builds a template to render with instead.
       def render_template(parent_binding: nil, slot_node: nil, props: {}, **kwargs)
         template = self.class.template
 
@@ -39,12 +39,12 @@ module Low
           Low::Events::ResponseEvent.new(response:).tap(&:branch)
         end
 
-        # LowLoad hook.
+        # Dirload hook.
         def template
           @template
         end
 
-        # LowLoad hook.
+        # Dirload hook.
         def build_template(template:, params:, engine:, namespace:)
           @template = Template.new(template:, params:, engine:, namespace:)
         end
