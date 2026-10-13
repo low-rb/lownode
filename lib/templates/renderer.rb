@@ -15,6 +15,9 @@ module Low
         current_binding = binding
 
         template.params.each do |param|
+          # The event keyword is already a local variable on this binding.
+          next if param == :event
+
           variable = props[param] || kwargs[param] || raise(ArgumentError, "Missing argument: '#{param}'")
           current_binding.local_variable_set(param, variable)
         end
