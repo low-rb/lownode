@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'template'
+require 'antlers/keywords'
 
 module Low
   module Templates
@@ -32,7 +33,7 @@ module Low
       end
 
       module ClassMethods
-        # Accepts all arguments but only sends arguments required by the sub class.
+        # Accepts all arguments but only sends each method the arguments it takes, like initialize(limit:) and render(event:).
         def render(**)
           # GOAL: Make return value configurable; ResponseEvent, Response, or body.
           body = response_body(**)
@@ -57,12 +58,10 @@ module Low
         private
 
         def response_body(**kwargs)
-          node = new(**kwargs)
-
+          node = new(**Antlers::Keywords.accepted(instance_method(:initialize), kwargs))
           return node.render_template(**kwargs) if @template
-          return node.render(**kwargs) if node.method(:render).arity > 0
 
-          node.render
+          node.render(**Antlers::Keywords.accepted(node.method(:render), kwargs))
         end
       end
     end

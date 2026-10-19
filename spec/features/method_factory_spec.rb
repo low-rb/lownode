@@ -32,6 +32,20 @@ RSpec.describe 'Method Factory' do
       end
     end
 
+    context 'with keywords' do
+      it 'sends initialize and render only the keywords each takes' do
+        expect(Ruby::KeywordNode.render(limit: 3, suffix: '!').response.body.read).to eq('3!')
+      end
+
+      it 'sends optional keywords' do
+        expect(Ruby::KeywordNode.render(suffix: '?').response.body.read).to eq('5?')
+      end
+
+      it 'ignores keywords neither takes' do
+        expect(Ruby::Node.render(limit: 3).response.body.read).to eq('node')
+      end
+    end
+
     context 'when parent' do
       it 'renders child' do
         expect(RBX::ParentNode.render.response.body.read).to eq('<html><p>I&#39;m a child</p></html>')
