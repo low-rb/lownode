@@ -29,6 +29,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'lowevent'
   spec.add_dependency 'lowtype', '~> 1.6'
   
-  spec.add_dependency 'antlers', '~> 1.2.1'
+  spec.add_dependency 'antlers', '~> 1.3'
   spec.add_dependency 'observers'
 end
