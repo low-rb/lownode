@@ -3,7 +3,6 @@
 require 'observers'
 require 'lowtype'
 require 'lowevent'
-require 'lowloop' # TODO: ResponseFactory should be done in LowLoop, which is where the class lives already anyway.
 
 require_relative 'templates/renderer'
 

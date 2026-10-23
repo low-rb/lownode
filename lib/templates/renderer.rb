@@ -2,6 +2,7 @@
 
 require_relative 'template'
 require 'antlers/keywords'
+require 'protocol/http'
 
 module Low
   module Templates
@@ -34,14 +35,14 @@ module Low
 
       module ClassMethods
         # Accepts all arguments but only sends each method the arguments it takes, like initialize(limit:) and render(event:).
-        def render(**)
+        def render(**kwargs)
           # GOAL: Make return value configurable; ResponseEvent, Response, or body.
-          body = response_body(**)
+          body = response_body(**kwargs)
 
           return if body.nil? || body == ''
 
-          # TODO: ResponseFactory should be done in LowLoop, which is where the class lives already anyway.
-          response = Low::ResponseFactory.html(body:)
+          headers = Protocol::HTTP::Headers.new([['content-type', 'text/html']])
+          response = Protocol::HTTP::Response.new('HTTP/1.1', response_status(kwargs[:event]), headers, Protocol::HTTP::Body::Buffered.wrap(body.strip))
           Low::Events::ResponseEvent.new(response:).tap(&:branch)
         end
 
@@ -56,6 +57,11 @@ module Low
         end
 
         private
+
+        # Responses default to 200 but when rendering for a StatusEvent use that event's status code.
+        def response_status(event)
+          event.is_a?(Low::Events::StatusEvent) ? event.status.status_code : 200
+        end
 
         def response_body(**kwargs)
           node = new(**Antlers::Keywords.accepted(instance_method(:initialize), kwargs))

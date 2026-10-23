@@ -24,10 +24,11 @@ Gem::Specification.new do |spec|
   spec.bindir = 'exe'
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
 
+  spec.add_dependency 'protocol-http'
+  
   spec.add_dependency 'lowevent'
-  spec.add_dependency 'lowloop' # TODO: Should not know anything about or use low loop.
   spec.add_dependency 'lowtype', '~> 1.6'
-
+  
   spec.add_dependency 'antlers', '~> 1.2.1'
   spec.add_dependency 'observers'
 end

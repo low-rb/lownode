@@ -7,7 +7,6 @@ gemspec
 
 group :development do
   gem 'lowevent', path: '../lowevent'
-  gem 'lowloop', path: '../lowloop'
   gem 'lowtype', path: '../lowtype'
 
   gem 'antlers', path: '../antlers'

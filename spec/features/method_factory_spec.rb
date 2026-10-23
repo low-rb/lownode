@@ -32,6 +32,23 @@ RSpec.describe 'Method Factory' do
       end
     end
 
+    context 'with status event' do
+      let(:event) { Low::Events::StatusEvent.new(status: Low::Types::Status[404], request: nil) }
+
+      it 'responds with the status code' do
+        response = Ruby::StatusNode.render(event:).response
+
+        expect(response.status).to eq(404)
+        expect(response.body.read).to eq('not found')
+      end
+    end
+
+    context 'without status event' do
+      it 'responds with 200' do
+        expect(Ruby::Node.render.response.status).to eq(200)
+      end
+    end
+
     context 'with keywords' do
       it 'sends initialize and render only the keywords each takes' do
         expect(Ruby::KeywordNode.render(limit: 3, suffix: '!').response.body.read).to eq('3!')
