@@ -1,7 +1,7 @@
 PATH
   remote: ../antlers
   specs:
-    antlers (1.3.0)
+    antlers (1.3.1)
       erb
       lowkey (>= 0.7.0)
       plugs
@@ -9,13 +9,13 @@ PATH
 PATH
   remote: ../dirload
   specs:
-    dirload (0.7.0)
+    dirload (0.7.1)
       lowkey
 
 PATH
   remote: ../lowevent
   specs:
-    lowevent (0.8.1)
+    lowevent (0.8.2)
       lowtype (~> 1.4)
       observers
       protocol-http
@@ -24,21 +24,21 @@ PATH
 PATH
   remote: ../lowtype
   specs:
-    lowtype (1.6.0)
+    lowtype (1.6.1)
       dirload
       expressions (~> 0.1)
-      lowkey (~> 0.5)
+      lowkey (>= 0.7.1)
       trees
 
 PATH
   remote: ../observers
   specs:
-    observers (0.9.0)
+    observers (1.1.0)
 
 PATH
   remote: .
   specs:
-    lownode (0.5.5)
+    lownode (0.5.6)
       antlers (~> 1.3)
       lowevent
       lowtype (~> 1.6)
@@ -62,7 +62,7 @@ GEM
     language_server-protocol (3.17.0.6)
     lint_roller (1.1.0)
     logger (1.7.0)
-    lowkey (0.7.0)
+    lowkey (0.7.1)
       prism
     parallel (2.3.0)
     parser (3.3.13.0)
@@ -122,7 +122,7 @@ GEM
       parser (>= 3.3.7.2)
       prism (~> 1.7)
     ruby-progressbar (1.13.0)
-    trees (0.4.0)
+    trees (0.3.5)
     tsort (0.2.0)
     unicode-display_width (3.3.0)
       unicode-emoji (~> 4.3)
@@ -147,11 +147,11 @@ DEPENDENCIES
   rubocop
 
 CHECKSUMS
-  antlers (1.3.0)
+  antlers (1.3.1)
   ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
   bundler (4.0.12) sha256=7f8b757d28dfb636e7b24fba2344ac6dd13b5b24f4b46d62573d483f211825ac
   diff-lcs (1.6.2) sha256=9ae0d2cba7d4df3075fe8cd8602a8604993efc0dfa934cff568969efb1909962
-  dirload (0.7.0)
+  dirload (0.7.1)
   erb (6.0.7) sha256=c5ca6dc25b0ef974a44dc8f59fe847577122483b1968a38dec305c60bf91ee92
   expressions (0.4.0) sha256=83470229d23c091c1d054b45b0cc850cf913d9daf92abc1de4f4cc5d4b4c7aef
   io-console (0.9.4) sha256=a403304f32928ee85e56d457b4612ca43f2703b561a3258844992bd24085fbb1
@@ -160,11 +160,11 @@ CHECKSUMS
   language_server-protocol (3.17.0.6) sha256=5ef2c0c138f8267e1bc631d3328347d354f96724b0af22f2c79516120443b7f0
   lint_roller (1.1.0) sha256=2c0c845b632a7d172cb849cc90c1bce937a28c5c8ccccb50dfd46a485003cc87
   logger (1.7.0) sha256=196edec7cc44b66cfb40f9755ce11b392f21f7967696af15d274dde7edff0203
-  lowevent (0.8.1)
-  lowkey (0.7.0) sha256=f058768d33ece32fe30690839b0f1cb80db2679b25617777cfd68301a951eebb
-  lownode (0.5.5)
-  lowtype (1.6.0)
-  observers (0.9.0)
+  lowevent (0.8.2)
+  lowkey (0.7.1) sha256=f2d5c2834d7f201d2536691dc91e9d4bc77cb361e46dace5674e42abbe39df6f
+  lownode (0.5.6)
+  lowtype (1.6.1)
+  observers (1.1.0)
   parallel (2.3.0) sha256=f75a3e904101ce6a1ccb6b8dc800cbafd42166d83330192438dcf29395167a6f
   parser (3.3.13.0) sha256=e02f9b63c2fe05b0c68f692ba4df89b3cb113b663964f75d988fbebfd6c3deca
   plugs (0.4.0) sha256=dd85ef01f9367ec575e09ee3db30aa4cf93185384f448768b4acc2dd48a00ba7
@@ -172,7 +172,7 @@ CHECKSUMS
   prettyprint (0.2.1) sha256=d555d57ea6d7cf001d4774b693546a6bd88bec1e778ddffb5c60b68ceec4b7d4
   prism (1.9.0) sha256=7b530c6a9f92c24300014919c9dcbc055bf4cdf51ec30aed099b06cd6674ef85
   protocol-http (0.72.1) sha256=5b0d718fb5d45ebc2690bf204977bb62d6550773e55c417ee9aa61be032876f3
-  providers (0.6.2)
+  providers (0.6.2) sha256=23b0c4aff06d389612751debca316f30a946c9a4afe2e4175d2878f4284c9c8b
   racc (1.8.1) sha256=4a7f6929691dbec8b5209a0b373bc2614882b55fc5d2e447a21aaa691303d62f
   rack (3.2.7) sha256=93e13e1c24f93556671d85d2d79fa228c3485815c50d7e2f265b5330c6528fb7
   rack-test (2.3.0) sha256=b118d177cc002c572fc1b6fd8d19c9ed5881a36e8d6f689f9e618f9f861241e8
@@ -190,7 +190,7 @@ CHECKSUMS
   rubocop (1.92.1) sha256=a905381a5344215a79abcfe80f6c94366447e6a55347c9a525b5a24990e33f62
   rubocop-ast (1.50.0) sha256=b9ca88300da0803ee222ad20cdb30494c0a784eed06fdc35d254b06d662788db
   ruby-progressbar (1.13.0) sha256=80fc9c47a9b640d6834e0dc7b3c94c9df37f08cb072b7761e4a71e22cff29b33
-  trees (0.4.0)
+  trees (0.3.5) sha256=adbcd976735a45eca6fdf253b7a4a0743d4b07e005cfed8c5e0028fb43ecfa9d
   tsort (0.2.0) sha256=9650a793f6859a43b6641671278f79cfead60ac714148aabe4e3f0060480089f
   unicode-display_width (3.3.0) sha256=4b7aa66a4b11db50f6f7e98411215cd0dd10eaecb665d36eec5bcacb3fa0b613
   unicode-emoji (4.3.0) sha256=11c02fa73290378c066bb0562cd4c87d8e1b706fbbe0059ca12746a4244de8ce
