@@ -50,3 +50,25 @@ module Ruby
     end
   end
 end
+
+module Ruby
+  # Sets cookies and redirects.
+  class SessionNode < LowNode
+    include Controller
+
+    def post
+      set_cookie('session', 'a b', max_age: 3600)
+      redirect('/home')
+    end
+
+    def get
+      set_cookie('theme', 'dark', http_only: false, secure: false, same_site: 'Strict')
+      'page'
+    end
+
+    def delete
+      set_cookie('session', '', max_age: 0)
+      Low::Types::Status[204]
+    end
+  end
+end

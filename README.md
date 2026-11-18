@@ -60,6 +60,23 @@ def render
 end
 ```
 
+## Responses
+
+A node's action can set cookies with its response, and return a redirect:
+
+```ruby
+class LoginNode < LowNode
+  include Controller
+
+  def post(event:)
+    set_cookie('session', 'token', max_age: 30 * 24 * 60 * 60)
+    redirect('/')
+  end
+end
+```
+
+Cookies are `HttpOnly`, `Secure` and `SameSite=Lax` unless you say otherwise, like `set_cookie('theme', 'dark', http_only: false)`, and `max_age: 0` expires one. A redirect is a 303, so the browser gets the new address after a form, and `redirect('/', status: 302)` changes it. Add any other header with `response_headers.add('cache-control', 'no-store')`.
+
 ## HTML
 
 Use `.rb` as your file extension to render using string interpolation:

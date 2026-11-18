@@ -5,6 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 Minor features that don't break backwards compatibility are released as patches.
 
+## 0.5.7
+
+### Added
+
+- `set_cookie(name, value, **options)` sets a cookie with the node's response, `HttpOnly`, `Secure` and `SameSite=Lax` by default
+- Return `redirect(location)` from an action to redirect, with a 303 by default
+- `response_headers` for any other headers a node sends with its response
+
 ## 0.5.6
 
 ### Added

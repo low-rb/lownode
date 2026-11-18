@@ -21,7 +21,8 @@ module Low
         actions.each do |action|
           mod.module_eval <<~RUBY, __FILE__, __LINE__ + 1
             def #{action}(**kwargs)
-              response_event(body: action_body(:#{action}, kwargs), event: kwargs[:event])
+              node, body = action_body(:#{action}, kwargs)
+              response_event(body:, event: kwargs[:event], headers: node&.response_headers)
             end
           RUBY
         end
@@ -79,34 +80,42 @@ module Low
         private
 
         # Only nodes that implement the action are initialized, so a "render" then "get" event initializes a "get" node once.
+        # The node, so its response headers can be sent, and what its action returned.
         def action_body(action, kwargs)
           template = action == :render && @template
           return unless template || method_defined?(action)
 
           node = new(**Antlers::Keywords.accepted(instance_method(:initialize), kwargs))
-          return node.render_template(**kwargs) if template
+          return [node, node.render_template(**kwargs)] if template
 
           # The action is public, as method_defined? doesn't include private methods.
-          node.__send__(action, **Antlers::Keywords.accepted(node.method(action), kwargs))
+          [node, node.__send__(action, **Antlers::Keywords.accepted(node.method(action), kwargs))]
         end
 
         # GOAL: Make return value configurable; ResponseEvent, Response, or body.
-        def response_event(body:, event:)
+        def response_event(body:, event:, headers: nil)
+          headers ||= Protocol::HTTP::Headers.new
           unless body.is_a?(String)
             return body if body.is_a?(Low::Events::ResponseEvent)
-            return status_response_event(status_code: body.status_code) if body.is_a?(Low::Types::Status::StatusCode)
+            return status_response_event(status_code: body.status_code, headers:) if body.is_a?(Low::Types::Status::StatusCode)
+            return redirect_response_event(redirect: body, headers:) if body.is_a?(Low::Responses::Redirect)
           end
           return if body.nil? || body == ''
 
-          headers = Protocol::HTTP::Headers.new([['content-type', 'text/html']])
+          headers.add('content-type', 'text/html')
           response = Protocol::HTTP::Response.new('HTTP/1.1', response_status(event), headers, Protocol::HTTP::Body::Buffered.wrap(body.strip))
           Low::Events::ResponseEvent.new(response:).tap(&:branch)
         end
 
         # Actions like "post" can return "Status[200]" to respond without a body.
-        def status_response_event(status_code:)
-          response = Protocol::HTTP::Response.new('HTTP/1.1', status_code, Protocol::HTTP::Headers.new, nil)
+        def status_response_event(status_code:, headers:)
+          response = Protocol::HTTP::Response.new('HTTP/1.1', status_code, headers, nil)
           Low::Events::ResponseEvent.new(response:).tap(&:branch)
+        end
+
+        def redirect_response_event(redirect:, headers:)
+          headers.add('location', redirect.location)
+          status_response_event(status_code: redirect.status, headers:)
         end
 
         # Responses default to 200 but when rendering for a StatusEvent use that event's status code.
