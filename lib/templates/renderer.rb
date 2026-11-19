@@ -31,8 +31,7 @@ module Low
       # Antlers hook.
       # When render() contains RBX/Antlers then dirload builds a template to render with instead.
       # When lowevent is required then Antlers will send an event keyword argument as well.
-      # The render context has the event and the routed node, the one the request was routed to, whose response headers a
-      # template can add to, like a form's cookie. A component rendered inside keeps the routed node from its parent.
+      # A component rendered inside a template gets the template's render context.
       def render_template(parent_binding: nil, slot_node: nil, props: {}, event: nil, context: {}, **kwargs)
         template = self.class.template
 
@@ -48,7 +47,6 @@ module Low
           current_binding.local_variable_set(param, variable)
         end
 
-        context = { routed_node: self, **context, event: }
         template.engine.render(ast: template.ast, current_binding:, parent_binding:, slot_node:, context:)
       end
 

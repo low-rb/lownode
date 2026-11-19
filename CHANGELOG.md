@@ -9,7 +9,7 @@ Minor features that don't break backwards compatibility are released as patches.
 
 ### Added
 
-- A template's render context has its event and the routed node, the one the request was routed to, as `context[:event]` and `context[:routed_node]`, so Antlers can hand them on, like to `Antlers.form_token`. Components keep the routed node, so what they add to its response headers is sent
+- A component rendered inside a template gets the template's render context
 
 ## 0.5.8
 
