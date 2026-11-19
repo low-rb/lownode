@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 Minor features that don't break backwards compatibility are released as patches.
 
+## Unreleased
+
+### Added
+
+- A template's render context has its event and the routed node, the one the request was routed to, as `context[:event]` and `context[:routed_node]`, so Antlers can hand them on, like to `Antlers.form_token`. Components keep the routed node, so what they add to its response headers is sent
+
 ## 0.5.8
 
 ### Added
