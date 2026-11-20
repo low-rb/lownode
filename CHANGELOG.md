@@ -10,6 +10,7 @@ Minor features that don't break backwards compatibility are released as patches.
 ### Added
 
 - An action can return a hash or an array, which is sent as JSON, or a `Protocol::HTTP::Response` it made itself, which is sent as it is. Either way the headers the node set, like its cookies, are added
+- `add_header(name, value)` adds a header to a node's response, like `set_cookie` adds a cookie, for an action that returns its body
 
 ## 0.5.9
 
