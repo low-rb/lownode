@@ -3,6 +3,7 @@
 require_relative 'template'
 require 'antlers/keywords'
 require 'protocol/http'
+require 'json'
 
 module Low
   module Templates
@@ -96,16 +97,35 @@ module Low
         # GOAL: Make return value configurable; ResponseEvent, Response, or body.
         def response_event(body:, event:, headers: nil)
           headers ||= Protocol::HTTP::Headers.new
-          unless body.is_a?(String)
-            return body if body.is_a?(Low::Events::ResponseEvent)
-            return status_response_event(status_code: body.status_code, headers:) if body.is_a?(Low::Types::Status::StatusCode)
-            return redirect_response_event(redirect: body, headers:) if body.is_a?(Low::Responses::Redirect)
+          case body
+          when Low::Events::ResponseEvent then body
+          when Low::Types::Status::StatusCode then status_response_event(status_code: body.status_code, headers:)
+          when Low::Responses::Redirect then redirect_response_event(redirect: body, headers:)
+          when Protocol::HTTP::Response then protocol_response_event(response: body, headers:)
+          when Hash, Array then json_response_event(data: body, event:, headers:)
+          when nil, '' then nil
+          else html_response_event(html: body, event:, headers:)
           end
-          return if body.nil? || body == ''
+        end
 
+        # What a template or action rendered, as HTML.
+        def html_response_event(html:, event:, headers:)
           headers.add('content-type', 'text/html')
-          response = Protocol::HTTP::Response.new('HTTP/1.1', response_status(event), headers, Protocol::HTTP::Body::Buffered.wrap(body.strip))
+          response = Protocol::HTTP::Response.new('HTTP/1.1', response_status(event), headers, Protocol::HTTP::Body::Buffered.wrap(html.strip))
           Low::Events::ResponseEvent.new(response:).tap(&:branch)
+        end
+
+        # A response an action made itself, with the headers the node set, like its cookies, added to its own.
+        def protocol_response_event(response:, headers:)
+          headers.each { |name, value| response.headers.add(name, value) }
+          Low::Events::ResponseEvent.new(response:)
+        end
+
+        # A hash or array an action returned, as JSON.
+        def json_response_event(data:, event:, headers:)
+          headers.add('content-type', 'application/json')
+          body = Protocol::HTTP::Body::Buffered.wrap(JSON.generate(data))
+          Low::Events::ResponseEvent.new(response: Protocol::HTTP::Response.new('HTTP/1.1', response_status(event), headers, body))
         end
 
         # Actions like "post" can return "Status[200]" to respond without a body.

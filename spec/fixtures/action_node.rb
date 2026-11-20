@@ -71,4 +71,24 @@ module Ruby
       Low::Types::Status[204]
     end
   end
+
+  # Responds with JSON from a hash or an array, or with a response it made itself.
+  class DataNode < LowNode
+    include Controller
+
+    def get
+      set_cookie('seen', 'yes', http_only: false)
+      { recipes: ['Rye'], count: 1 }
+    end
+
+    def put
+      [1, 2]
+    end
+
+    def post
+      set_cookie('seen', 'yes', http_only: false)
+      headers = Protocol::HTTP::Headers.new([%w[content-type text/plain]])
+      Protocol::HTTP::Response.new('HTTP/1.1', 201, headers, Protocol::HTTP::Body::Buffered.wrap('made'))
+    end
+  end
 end

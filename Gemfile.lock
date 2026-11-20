@@ -1,7 +1,7 @@
 PATH
   remote: ../antlers
   specs:
-    antlers (1.5.3)
+    antlers (1.5.5)
       lowkey (>= 0.7.0)
       plugs
 
@@ -147,7 +147,7 @@ DEPENDENCIES
   rubocop
 
 CHECKSUMS
-  antlers (1.5.3)
+  antlers (1.5.5)
   ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
   bundler (4.0.12) sha256=7f8b757d28dfb636e7b24fba2344ac6dd13b5b24f4b46d62573d483f211825ac
   diff-lcs (1.6.2) sha256=9ae0d2cba7d4df3075fe8cd8602a8604993efc0dfa934cff568969efb1909962
