@@ -27,6 +27,12 @@ class LowNode
     @response_headers ||= Protocol::HTTP::Headers.new
   end
 
+  # Adds a header to this node's response, like add_header('cache-control', 'public, max-age=3600'), for an action that
+  # returns its body, like a string, a hash or an array.
+  def add_header(name, value)
+    response_headers.add(name, value)
+  end
+
   # Sets a cookie with this node's response. Expire one with "max_age: 0".
   def set_cookie(name, value, **)
     response_headers.add('set-cookie', Low::Responses::Cookie.new(name:, value:, **).to_s)

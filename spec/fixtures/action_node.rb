@@ -72,12 +72,14 @@ module Ruby
     end
   end
 
-  # Responds with JSON from a hash or an array, or with a response it made itself.
+  # Responds with JSON from a hash or an array, adding its headers as it goes, or with a response it made itself, with its
+  # headers.
   class DataNode < LowNode
     include Controller
 
     def get
       set_cookie('seen', 'yes', http_only: false)
+      add_header('cache-control', 'public, max-age=60')
       { recipes: ['Rye'], count: 1 }
     end
 
@@ -87,8 +89,7 @@ module Ruby
 
     def post
       set_cookie('seen', 'yes', http_only: false)
-      headers = Protocol::HTTP::Headers.new([%w[content-type text/plain]])
-      Protocol::HTTP::Response.new('HTTP/1.1', 201, headers, Protocol::HTTP::Body::Buffered.wrap('made'))
+      Protocol::HTTP::Response[201, { 'content-type' => 'text/plain', 'cache-control' => 'no-store' }, ['made']]
     end
   end
 end

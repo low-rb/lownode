@@ -28,19 +28,21 @@ RSpec.describe 'Responses' do
     expect(response.headers['set-cookie']).to eq(['session=; Path=/; Max-Age=0; HttpOnly; Secure; SameSite=Lax'])
   end
 
-  it 'sends a returned hash or array as JSON, with the cookies the node set' do
+  it 'sends a returned hash or array as JSON, with the headers and cookies the node added' do
     response = Ruby::DataNode.get.response
 
     expect([response.status, response.headers['content-type'], response.body.read])
       .to eq([200, 'application/json', '{"recipes":["Rye"],"count":1}'])
-    expect(response.headers['set-cookie']).to eq(['seen=yes; Path=/; Secure; SameSite=Lax'])
+    expect([response.headers['cache-control'], response.headers['set-cookie']])
+      .to eq([['public', 'max-age=60'], ['seen=yes; Path=/; Secure; SameSite=Lax']])
     expect(Ruby::DataNode.put.response.body.read).to eq('[1,2]')
   end
 
-  it 'sends a returned response as it is, with the cookies the node set' do
+  it 'sends a returned response as it is, with its own headers and the cookies the node set' do
     response = Ruby::DataNode.post.response
 
-    expect([response.status, response.headers['content-type'], response.body.read]).to eq([201, 'text/plain', 'made'])
+    expect([response.status, response.headers['content-type'], response.headers['cache-control'], response.body.read])
+      .to eq([201, 'text/plain', ['no-store'], 'made'])
     expect(response.headers['set-cookie']).to eq(['seen=yes; Path=/; Secure; SameSite=Lax'])
   end
 
