@@ -49,6 +49,25 @@ module Ruby
       'not a controller'
     end
   end
+
+  # Returns HTML with whitespace around it, frozen like a literal or built like a rendered page.
+  class PaddedNode < LowNode
+    include Controller
+
+    FROZEN = "\n  <p>frozen</p>\n"
+
+    class << self
+      attr_accessor :built
+    end
+
+    def get
+      FROZEN
+    end
+
+    def post
+      self.class.built = +"\n  <p>built</p>\n"
+    end
+  end
 end
 
 module Ruby

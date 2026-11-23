@@ -37,6 +37,20 @@ RSpec.describe 'Actions' do
     expect(Ruby::ActionNode.post(event: 'event', limit: 3).response.body.read).to eq('posted event')
   end
 
+  context 'with whitespace around returned HTML' do
+    it 'strips a frozen string without changing it' do
+      expect(Ruby::PaddedNode.get.response.body.read).to eq('<p>frozen</p>')
+      expect(Ruby::PaddedNode::FROZEN).to eq("\n  <p>frozen</p>\n")
+    end
+
+    it 'strips a built string in place rather than copying it' do
+      chunk = Ruby::PaddedNode.post.response.body.chunks.first
+
+      expect(chunk).to eq('<p>built</p>')
+      expect(chunk).to equal(Ruby::PaddedNode.built)
+    end
+  end
+
   it 'responds with the status of a returned status' do
     response = Ruby::ActionNode.put.response
 
