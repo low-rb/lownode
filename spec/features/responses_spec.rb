@@ -55,4 +55,12 @@ RSpec.describe 'Responses' do
   it 'refuses an unknown SameSite' do
     expect { Low::Responses::Cookie.new(name: 'a', value: 'b', same_site: 'Loose') }.to raise_error(ArgumentError)
   end
+
+  it "adds a JSON response and one the action made itself to the request's event tree, like an HTML one" do
+    pool = Providers['low.event.pool']
+    responses = [Ruby::DataNode.put, Ruby::DataNode.post]
+    # By identity, as events of the same class are equal.
+    expect(responses.map { |response| pool.current_event_tree(event: response).sequence.any? { it.equal?(response) } })
+      .to eq([true, true])
+  end
 end

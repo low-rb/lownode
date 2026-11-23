@@ -120,14 +120,15 @@ module Low
         # A response an action made itself, with the headers the node set, like its cookies, added to its own.
         def protocol_response_event(response:, headers:)
           headers.each { |name, value| response.headers.add(name, value) }
-          Low::Events::ResponseEvent.new(response:)
+          Low::Events::ResponseEvent.new(response:).tap(&:branch)
         end
 
         # A hash or array an action returned, as JSON.
         def json_response_event(data:, event:, headers:)
           headers.add('content-type', 'application/json')
           body = Protocol::HTTP::Body::Buffered.wrap(JSON.generate(data))
-          Low::Events::ResponseEvent.new(response: Protocol::HTTP::Response.new('HTTP/1.1', response_status(event), headers, body))
+          response = Protocol::HTTP::Response.new('HTTP/1.1', response_status(event), headers, body)
+          Low::Events::ResponseEvent.new(response:).tap(&:branch)
         end
 
         # Actions like "post" can return "Status[200]" to respond without a body.
