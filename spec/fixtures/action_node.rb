@@ -98,3 +98,17 @@ module Ruby
     end
   end
 end
+
+module Ruby
+  # Counts the intervals it's ticked for, returning something that isn't a response, as interval jobs often do.
+  class TickNode < LowNode
+    class << self
+      attr_accessor :ticks
+    end
+
+    def tick(event:)
+      (self.class.ticks ||= []) << event
+      3.times { nil }
+    end
+  end
+end

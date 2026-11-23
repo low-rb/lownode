@@ -53,6 +53,17 @@ class LowNode
       new(event:).handle(event:)
     end
 
+    # Observers call this each time an interval the node observes is due, like "observe Interval[every_minute: 5]", on the
+    # interval's own thread so it doesn't hold up requests. Only a node that defines "tick" is initialized, and what it
+    # returns is ignored, as nothing responds to an interval.
+    def tick(**kwargs)
+      return unless method_defined?(:tick)
+
+      node = new(**Antlers::Keywords.accepted(instance_method(:initialize), kwargs))
+      node.tick(**Antlers::Keywords.accepted(node.method(:tick), kwargs))
+      nil
+    end
+
     def inherited(child)
       child.include LowType
       increase_count
