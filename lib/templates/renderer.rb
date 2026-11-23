@@ -108,9 +108,9 @@ module Low
           end
         end
 
-        # What a template or action rendered, as HTML.
+        # What a template or action rendered, as HTML unless the node added its own content type, like text/plain.
         def html_response_event(html:, event:, headers:)
-          headers.add('content-type', 'text/html')
+          headers.add('content-type', 'text/html') unless headers.include?('content-type')
           response = Protocol::HTTP::Response.new('HTTP/1.1', response_status(event), headers, Protocol::HTTP::Body::Buffered.wrap(html.strip))
           Low::Events::ResponseEvent.new(response:).tap(&:branch)
         end

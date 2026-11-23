@@ -38,6 +38,12 @@ RSpec.describe 'Responses' do
     expect(Ruby::DataNode.put.response.body.read).to eq('[1,2]')
   end
 
+  it 'sends returned text with the content type the node added' do
+    response = Ruby::DataNode.patch.response
+
+    expect([response.headers['content-type'], response.body.read]).to eq(['text/plain', 'User-agent: *'])
+  end
+
   it 'sends a returned response as it is, with its own headers and the cookies the node set' do
     response = Ruby::DataNode.post.response
 

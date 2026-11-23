@@ -87,6 +87,11 @@ module Ruby
       [1, 2]
     end
 
+    def patch
+      add_header('content-type', 'text/plain')
+      'User-agent: *'
+    end
+
     def post
       set_cookie('seen', 'yes', http_only: false)
       Protocol::HTTP::Response[201, { 'content-type' => 'text/plain', 'cache-control' => 'no-store' }, ['made']]
