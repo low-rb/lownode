@@ -27,6 +27,11 @@ class LowNode
     @response_headers ||= Protocol::HTTP::Headers.new
   end
 
+  # The headers the node added, or nil when it added none, so a response without any doesn't make them.
+  def added_headers
+    @response_headers
+  end
+
   # Adds a header to this node's response, like add_header('cache-control', 'public, max-age=3600'), for an action that
   # returns its body, like a string, a hash or an array.
   def add_header(name, value)

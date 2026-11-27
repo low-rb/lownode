@@ -63,4 +63,10 @@ RSpec.describe 'Responses' do
     expect(responses.map { |response| pool.current_event_tree(event: response).sequence.any? { it.equal?(response) } })
       .to eq([true, true])
   end
+
+  it 'sends HTML with only its content type when the node added no headers' do
+    response = Ruby::Node.render.response
+
+    expect(response.headers.fields).to eq([%w[content-type text/html]])
+  end
 end

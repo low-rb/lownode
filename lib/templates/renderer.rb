@@ -25,9 +25,9 @@ module Low
           mod.module_eval <<~RUBY, __FILE__, __LINE__ + 1
             def #{action}(**kwargs)
               node, body = action_body(:#{action}, kwargs)
-              return if body.nil? || body == ''
+              return if body.nil? || (body.is_a?(String) && body.empty?)
 
-              response_event(body:, event: kwargs[:event], headers: node&.response_headers)
+              response_event(body:, event: kwargs[:event], headers: node&.added_headers)
             end
           RUBY
         end
@@ -113,9 +113,12 @@ module Low
         # The keywords the method takes, like Antlers::Keywords.accepted, but with its params read once for each method,
         # as reading them makes new objects every time. A method that's defined again, like when a file reloads, is a
         # different method, so its params are read again.
+        # When the method takes every keyword given, like a node's initialize(event:), they're passed as they are.
         def accepted_keywords(method, kwargs)
           names = Renderer.keyword_names[method] ||= keyword_names(method.parameters)
-          names == :all ? kwargs : kwargs.slice(*names)
+          return kwargs if names == :all || kwargs.all? { |key, _| names.include?(key) }
+
+          kwargs.slice(*names)
         end
 
         def keyword_names(parameters)
@@ -138,11 +141,16 @@ module Low
 
         # What a template or action rendered, as HTML unless the node added its own content type, like text/plain.
         def html_response_event(html:, event:, headers:)
-          headers.add('content-type', 'text/html') unless headers.include?('content-type')
+          headers.add('content-type', 'text/html') unless content_type?(headers)
           # A rendered page is a new string, so strip it in place rather than copying it. A frozen string is copied.
           html = html.frozen? ? html.strip : html.tap(&:strip!)
           response = Protocol::HTTP::Response.new('HTTP/1.1', response_status(event), headers, Protocol::HTTP::Body::Buffered.wrap(html))
           Low::Events::ResponseEvent.new(response:).tap(&:branch)
+        end
+
+        # Whether the node set a content type. Its headers are looked through as a list, as include? indexes them all.
+        def content_type?(headers)
+          headers.fields.any? { |name, _| (name = name.to_s).length == 12 && name.casecmp('content-type') == 0 } # rubocop:disable Style/NumericPredicate
         end
 
         # A response an action made itself, with the headers the node set, like its cookies, added to its own.
