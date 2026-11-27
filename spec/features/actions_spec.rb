@@ -73,4 +73,16 @@ RSpec.describe 'Actions' do
       expect(Ruby::ActionNode.initialized).to eq(0)
     end
   end
+
+  describe '.handles?' do
+    it 'handles an action it defines, and not one it does not' do
+      expect(Ruby::ActionNode.handles?(:receive)).to be(true)
+      expect(Ruby::ActionNode.handles?(:side_effect)).to be(false)
+    end
+
+    it 'responds to an action it does not handle with nothing, without initializing' do
+      expect(Ruby::ActionNode.side_effect(event: 'event')).to be_nil
+      expect(Ruby::ActionNode.initialized).to eq(0)
+    end
+  end
 end

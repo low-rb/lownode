@@ -5,6 +5,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 Minor features that don't break backwards compatibility are released as patches.
 
+## Unreleased
+
+### Added
+
+- `handles?(action)` says whether a node does anything for an action, like a `side_effect` it defines, so a router can skip events no node handles
+
+### Changed
+
+- An action without a body, like a `side_effect` a node doesn't have, no longer makes response headers it won't send
+
 ## 0.5.15
 
 ### Changed

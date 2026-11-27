@@ -18,11 +18,15 @@ module Low
 
       # Accepts all arguments but only sends each method the arguments it takes, like initialize(limit:) and render(event:).
       # Defined with "def" rather than "define_method" because a block with keyword arguments is slower to call.
+      # Without a body there's no response, so no headers are made for one, like a parent route's side_effect that a
+      # node doesn't have.
       def self.define_actions(mod, actions)
         actions.each do |action|
           mod.module_eval <<~RUBY, __FILE__, __LINE__ + 1
             def #{action}(**kwargs)
               node, body = action_body(:#{action}, kwargs)
+              return if body.nil? || body == ''
+
               response_event(body:, event: kwargs[:event], headers: node&.response_headers)
             end
           RUBY
@@ -84,13 +88,20 @@ module Low
           @template = Template.new(template:, params:, engine:, namespace:)
         end
 
+        # Whether the node does anything for the action, like render with a template, or a side_effect it defines. A
+        # router can skip an event no node handles, like a parent route's side_effect.
+        def handles?(action)
+          (action == :render && !@template.nil?) || method_defined?(action)
+        end
+
         private
 
         # Only nodes that implement the action are initialized, so a "render" then "get" event initializes a "get" node once.
         # The node, so its response headers can be sent, and what its action returned.
         def action_body(action, kwargs)
+          return unless handles?(action)
+
           template = action == :render && @template
-          return unless template || method_defined?(action)
 
           node = new(**accepted_keywords(instance_method(:initialize), kwargs))
           return [node, node.render_template(**kwargs)] if template
