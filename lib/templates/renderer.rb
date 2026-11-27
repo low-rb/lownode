@@ -55,6 +55,11 @@ module Low
         base.extend(ClassMethods)
       end
 
+      # Each method's keyword names, or :all for one that takes **.
+      def self.keyword_names
+        @keyword_names ||= {}
+      end
+
       # Adds the HTTP verb actions to a node with "include Controller", so it can respond with "def get" and "def post".
       module Controller
         def self.included(base)
@@ -87,11 +92,23 @@ module Low
           template = action == :render && @template
           return unless template || method_defined?(action)
 
-          node = new(**Antlers::Keywords.accepted(instance_method(:initialize), kwargs))
+          node = new(**accepted_keywords(instance_method(:initialize), kwargs))
           return [node, node.render_template(**kwargs)] if template
 
           # The action is public, as method_defined? doesn't include private methods.
-          [node, node.__send__(action, **Antlers::Keywords.accepted(node.method(action), kwargs))]
+          [node, node.__send__(action, **accepted_keywords(instance_method(action), kwargs))]
+        end
+
+        # The keywords the method takes, like Antlers::Keywords.accepted, but with its params read once for each method,
+        # as reading them makes new objects every time. A method that's defined again, like when a file reloads, is a
+        # different method, so its params are read again.
+        def accepted_keywords(method, kwargs)
+          names = Renderer.keyword_names[method] ||= keyword_names(method.parameters)
+          names == :all ? kwargs : kwargs.slice(*names)
+        end
+
+        def keyword_names(parameters)
+          parameters.any? { |type, _| type == :keyrest } ? :all : Antlers::Keywords.declared(parameters).freeze
         end
 
         # GOAL: Make return value configurable; ResponseEvent, Response, or body.
